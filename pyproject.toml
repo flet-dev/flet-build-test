@@ -23,6 +23,11 @@ dependencies = [
     "flet-webview >=0.70.0.dev0",
 ]
 
+[dependency-groups]
+dev = [
+    "flet[all]>=0.70.0.dev0",
+]
+
 [tool.uv]
 prerelease = "allow"
 
