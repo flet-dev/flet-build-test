@@ -1,9 +1,20 @@
 name: Flet Build
 
 on:
-  push:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+      - dev
+    paths-ignore:
+      - '.github/dependabot.yml'
+      - 'LICENSE'
+      - 'README.md'
   pull_request:
+    paths-ignore:
+      - '.github/dependabot.yml'
+      - 'LICENSE'
+      - 'README.md'
 
 env:
   UV_PYTHON: 3.12
