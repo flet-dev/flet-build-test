@@ -19,8 +19,10 @@ on:
 concurrency:
   # PRs share a group (PR number) → newer PR runs cancel older ones.
   # Push/dispatch runs use unique run_id → nothing gets cancelled.
-  group: build-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  # group: build-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  # cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.head.ref || github.ref_name }}
+  cancel-in-progress: true
 
 env:
   UV_PYTHON: 3.12
@@ -256,7 +258,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'}}
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
     steps:
       - name: Merge Dependabot PR
