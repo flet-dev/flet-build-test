@@ -43,6 +43,21 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
 
+      - name: Get Flutter version
+        shell: bash
+        run: |
+          # uv venv
+          FLUTTER_VERSION="$( uv run python -c 'import flet.version; print(flet.version.flutter_version)' )"
+          echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> "$GITHUB_ENV"
+          echo "Flutter version: $FLUTTER_VERSION"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
       - name: Install Linux dependencies
         shell: bash
         run: |
@@ -74,7 +89,6 @@ jobs:
 
       - name: Flet Build Linux
         run: |
-          uv venv
           uv run flet build linux --yes --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION
 
       - name: Upload Linux Artifact
@@ -95,9 +109,23 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
 
+      - name: Get Flutter version
+        shell: bash
+        run: |
+          # uv venv
+          FLUTTER_VERSION="$( uv run python -c 'import flet.version; print(flet.version.flutter_version)' )"
+          echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> "$GITHUB_ENV"
+          echo "Flutter version: $FLUTTER_VERSION"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
       - name: Flet Build macOS
         run: |
-          uv venv
           uv run flet build macos --yes --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION
 
       - name: Upload macOS Artifact
@@ -118,10 +146,24 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
 
+      - name: Get Flutter version
+        shell: bash
+        run: |
+          # uv venv
+          FLUTTER_VERSION="$( uv run python -c 'import flet.version; print(flet.version.flutter_version)' )"
+          echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> "$GITHUB_ENV"
+          echo "Flutter version: $FLUTTER_VERSION"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
       - name: Flet Build Windows
         shell: bash
         run: |
-          uv venv
           uv run flet build windows --yes --verbose --no-rich-output --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION
 
       - name: Upload Windows Artifact
@@ -151,10 +193,24 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
 
+      - name: Get Flutter version
+        shell: bash
+        run: |
+          # uv venv
+          FLUTTER_VERSION="$( uv run python -c 'import flet.version; print(flet.version.flutter_version)' )"
+          echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> "$GITHUB_ENV"
+          echo "Flutter version: $FLUTTER_VERSION"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
       - name: Flet Build AAB
         shell: bash
         run: |
-          uv venv
           uv run flet build aab --yes --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION
 
       - name: Upload AAB Artifact
@@ -184,10 +240,24 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
 
+      - name: Get Flutter version
+        shell: bash
+        run: |
+          # uv venv
+          FLUTTER_VERSION="$( uv run python -c 'import flet.version; print(flet.version.flutter_version)' )"
+          echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> "$GITHUB_ENV"
+          echo "Flutter version: $FLUTTER_VERSION"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
       - name: Flet Build APK
         shell: bash
         run: |
-          uv venv
           uv run flet build apk --yes --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION
 
       - name: Upload APK Artifact
@@ -208,9 +278,23 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
 
+      - name: Get Flutter version
+        shell: bash
+        run: |
+          # uv venv
+          FLUTTER_VERSION="$( uv run python -c 'import flet.version; print(flet.version.flutter_version)' )"
+          echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> "$GITHUB_ENV"
+          echo "Flutter version: $FLUTTER_VERSION"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
       - name: Flet Build IPA
         run: |
-          uv venv
           uv run flet build ipa --yes --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION 
 
       - name: Upload IPA Artifact
@@ -235,10 +319,24 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
 
+      - name: Get Flutter version
+        shell: bash
+        run: |
+          # uv venv
+          FLUTTER_VERSION="$( uv run python -c 'import flet.version; print(flet.version.flutter_version)' )"
+          echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> "$GITHUB_ENV"
+          echo "Flutter version: $FLUTTER_VERSION"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
       - name: Flet Build Web
         shell: bash
         run: |
-          uv venv
           uv run flet build web --yes --verbose
 
       - name: Upload Web Artifact
