@@ -2,17 +2,24 @@ name: Flet Build
 
 on:
   workflow_dispatch:
+  schedule:
+    #        ┌───────────── minute (0 - 59)
+    #        │ ┌───────────── hour (0 - 23)
+    #        │ │ ┌───────────── day of the month (1 - 31)
+    #        │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+    #        │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+    #        │ │ │ │ │
+    #        * * * * *
+    - cron: '0 12 * * *'
   push:
     branches:
       - main
       - dev
     paths-ignore:
-      - '.github/dependabot.yml'
       - 'LICENSE'
       - 'README.md'
   pull_request:
     paths-ignore:
-      - '.github/dependabot.yml'
       - 'LICENSE'
       - 'README.md'
 
@@ -25,11 +32,13 @@ on:
 env:
   UV_PYTHON: 3.12
   PYTHONUTF8: 1
-  CMAKE_VERSION: 3.22.1
+  SCRIPTS: "${{ github.workspace }}/.github/workflows/scripts"
 
   # https://docs.flet.dev/publish/#versioning
   BUILD_NUMBER: 1
   BUILD_VERSION: 1.0.0
+
+  # https://docs.flet.dev/reference/environment-variables
   FLET_CLI_NO_RICH_OUTPUT: 1
 
 jobs:
@@ -69,12 +78,22 @@ jobs:
             gstreamer1.0-gtk3 \
             gstreamer1.0-qt5 \
             gstreamer1.0-pulseaudio
-      
+
           sudo apt-get clean
+
+      - name: Get Flet & Flutter versions
+        shell: bash
+        run: |
+          uv venv
+          uv run python -c "import flet.version; print(f'FLET_VERSION={flet.version.flet_version}'); print(f'FLUTTER_VERSION={flet.version.flutter_version}')" | tee -a "$GITHUB_ENV" "$GITHUB_STEP_SUMMARY"
+
+      - name: Pin flet* versions in pyproject.toml to ${{ env.FLET_VERSION }}
+        shell: bash
+        run: |
+          uv run "$SCRIPTS/pin_flet_deps.py" pyproject.toml $FLET_VERSION
 
       - name: Flet Build Linux
         run: |
-          uv venv
           uv run flet build linux --yes --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION
 
       - name: Upload Linux Artifact
@@ -95,9 +114,19 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
 
-      - name: Flet Build macOS
+      - name: Get Flet & Flutter versions
+        shell: bash
         run: |
           uv venv
+          uv run python -c "import flet.version; print(f'FLET_VERSION={flet.version.flet_version}'); print(f'FLUTTER_VERSION={flet.version.flutter_version}')" | tee -a "$GITHUB_ENV"
+
+      - name: Pin flet* versions in pyproject.toml to ${{ env.FLET_VERSION }}
+        shell: bash
+        run: |
+          uv run "$SCRIPTS/pin_flet_deps.py" pyproject.toml $FLET_VERSION
+
+      - name: Flet Build macOS
+        run: |
           uv run flet build macos --yes --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION
 
       - name: Upload macOS Artifact
@@ -118,10 +147,20 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
 
-      - name: Flet Build Windows
+      - name: Get Flet & Flutter versions
         shell: bash
         run: |
           uv venv
+          uv run python -c "import flet.version; print(f'FLET_VERSION={flet.version.flet_version}'); print(f'FLUTTER_VERSION={flet.version.flutter_version}')" | tee -a "$GITHUB_ENV"
+
+      - name: Pin flet* versions in pyproject.toml to ${{ env.FLET_VERSION }}
+        shell: bash
+        run: |
+          uv run "$SCRIPTS/pin_flet_deps.py" pyproject.toml $FLET_VERSION
+
+      - name: Flet Build Windows
+        shell: bash
+        run: |
           uv run flet build windows --yes --verbose --no-rich-output --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION
 
       - name: Upload Windows Artifact
@@ -143,18 +182,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v2
-        with:
-          cmake-version: ${{ env.CMAKE_VERSION }}
-
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
+
+      - name: Get Flet & Flutter versions
+        shell: bash
+        run: |
+          uv venv
+          uv run python -c "import flet.version; print(f'FLET_VERSION={flet.version.flet_version}'); print(f'FLUTTER_VERSION={flet.version.flutter_version}')" | tee -a "$GITHUB_ENV"
+
+      - name: Pin flet* versions in pyproject.toml to ${{ env.FLET_VERSION }}
+        shell: bash
+        run: |
+          uv run "$SCRIPTS/pin_flet_deps.py" pyproject.toml $FLET_VERSION
 
       - name: Flet Build AAB
         shell: bash
         run: |
-          uv venv
           uv run flet build aab --yes --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION
 
       - name: Upload AAB Artifact
@@ -176,18 +220,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v2
-        with:
-          cmake-version: ${{ env.CMAKE_VERSION }}
-
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
+
+      - name: Get Flet & Flutter versions
+        shell: bash
+        run: |
+          uv venv
+          uv run python -c "import flet.version; print(f'FLET_VERSION={flet.version.flet_version}'); print(f'FLUTTER_VERSION={flet.version.flutter_version}')" | tee -a "$GITHUB_ENV"
+
+      - name: Pin flet* versions in pyproject.toml to ${{ env.FLET_VERSION }}
+        shell: bash
+        run: |
+          uv run "$SCRIPTS/pin_flet_deps.py" pyproject.toml $FLET_VERSION
 
       - name: Flet Build APK
         shell: bash
         run: |
-          uv venv
           uv run flet build apk --yes --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION
 
       - name: Upload APK Artifact
@@ -208,10 +257,20 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
 
-      - name: Flet Build IPA
+      - name: Get Flet & Flutter versions
+        shell: bash
         run: |
           uv venv
-          uv run flet build ipa --yes --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION 
+          uv run python -c "import flet.version; print(f'FLET_VERSION={flet.version.flet_version}'); print(f'FLUTTER_VERSION={flet.version.flutter_version}')" | tee -a "$GITHUB_ENV"
+
+      - name: Pin flet* versions in pyproject.toml to ${{ env.FLET_VERSION }}
+        shell: bash
+        run: |
+          uv run "$SCRIPTS/pin_flet_deps.py" pyproject.toml $FLET_VERSION
+
+      - name: Flet Build IPA
+        run: |
+          uv run flet build ipa --yes --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION
 
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v5.0.0
@@ -235,10 +294,20 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
 
-      - name: Flet Build Web
+      - name: Get Flet & Flutter versions
         shell: bash
         run: |
           uv venv
+          uv run python -c "import flet.version; print(f'FLET_VERSION={flet.version.flet_version}'); print(f'FLUTTER_VERSION={flet.version.flutter_version}')" | tee -a "$GITHUB_ENV"
+
+      - name: Pin flet* versions in pyproject.toml to ${{ env.FLET_VERSION }}
+        shell: bash
+        run: |
+          uv run "$SCRIPTS/pin_flet_deps.py" pyproject.toml $FLET_VERSION
+
+      - name: Flet Build Web
+        shell: bash
+        run: |
           uv run flet build web --yes --verbose
 
       - name: Upload Web Artifact
@@ -248,18 +317,3 @@ jobs:
           path: build/web
           if-no-files-found: warn
           overwrite: false
-
-#  dependabot:
-#    name: 'Dependabot'
-#    needs: [build-aab, build-apk, build-ipa, build-linux, build-macos, build-web, build-windows]
-#    runs-on: ubuntu-latest
-#    if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'}}
-#    permissions:
-#      contents: write
-#      pull-requests: write
-#    steps:
-#      - name: Merge Dependabot PR
-#        env:
-#          PR_URL: ${{github.event.pull_request.html_url}}
-#          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-#        run: gh pr merge --auto --merge "$PR_URL"

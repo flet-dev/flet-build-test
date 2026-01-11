@@ -6,25 +6,25 @@ requires-python = ">=3.10"
 authors = [{ name = "Appveyor Systems Inc.", email = "hello@flet.dev" }]
 
 dependencies = [
-    "flet >=0.80.1",
-    "flet-ads >=0.80.1",
-    "flet-audio >=0.80.1",
-    "flet-audio-recorder >=0.80.1",
-    "flet-charts >=0.80.1",
-    "flet-datatable2 >=0.80.1",
-    "flet-flashlight >=0.80.1",
-    "flet-geolocator >=0.80.1",
-    "flet-lottie >=0.80.1",
-    "flet-map >=0.80.1",
-    "flet-permission-handler >=0.80.1",
-    "flet-rive >=0.80.1",
-    "flet-video >=0.80.1",
-    "flet-webview >=0.80.1",
+    "flet",
+    "flet-ads",
+    "flet-audio",
+    "flet-audio-recorder",
+    "flet-charts",
+    "flet-datatable2",
+    "flet-flashlight",
+    "flet-geolocator",
+    "flet-lottie",
+    "flet-map",
+    "flet-permission-handler",
+    "flet-rive",
+    "flet-video",
+    "flet-webview",
 ]
 
 [dependency-groups]
 dev = [
-    "flet[all] >=0.80.1",
+    "flet[all]",
 ]
 
 [tool.uv]
