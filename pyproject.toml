@@ -18,7 +18,7 @@ dependencies = [
     "flet-map",
     "flet-permission-handler",
     #"flet-rive",
-    #"flet-secure-storage",
+    "flet-secure-storage",
     "flet-video",
     "flet-webview",
 ]
