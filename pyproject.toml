@@ -29,7 +29,7 @@ dev = [
 ]
 
 [tool.uv]
-prerelease = "allow"
+prerelease = "disallow"
 
 # Docs: https://docs.flet.dev/publish/
 [tool.flet]
