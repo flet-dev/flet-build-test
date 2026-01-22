@@ -78,6 +78,9 @@ jobs:
             gstreamer1.0-gtk3 \
             gstreamer1.0-qt5 \
             gstreamer1.0-pulseaudio
+            pkg-config \
+            libsecret-1-0 \
+            libsecret-1-dev
 
           sudo apt-get clean
 
